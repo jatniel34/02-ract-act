@@ -5,7 +5,7 @@ const SearchComponent = () => {
   const  [ users, setUsers ] = useState([ ])
   const  [ search, setSearch] = useState ("")
   //funncion para traer los datos API
-  const URL = 'https://jsonplaceholder.typicode.com/users'
+  const URL = 'https://api.github.com/repos/facebook/react/issues'
 
   const showData = async () => {
     const response = await fetch(URL)
@@ -24,15 +24,16 @@ const SearchComponent = () => {
    let results = [ ]
    if(!search)
    {
+    console.log(users);
       results =users
    } else {
      results = users.filter ( (dato) =>
-    dato.name.toLowerCase().includes(search.toLocaleLowerCase())
+    dato.title.toLowerCase().includes(search.toLocaleLowerCase())
     )
    }
 
   useEffect( () => {
-    showData()
+     showData()
   }, [])
   //rendizamos la vista
   return (
@@ -42,15 +43,21 @@ const SearchComponent = () => {
       <table className='table table-striped table-hover mt-5 shadow-lg'>
           <thead>
             <tr className='bg-curso text-white'>
-                <th>Nombre</th>
-                <th>ID Use</th>
+                <th>ID</th>
+                <th>Titulo</th>
+                <th>Nombre Usuario</th>
+                <th>Labels</th>
             </tr>
           </thead>
           <tbody>
             { results.map ( (user)  => (
                 <tr key= {user.id}>
-                    <td>{user.name}</td>
-                    <td>{user.username}</td>
+                    <td>{user.id}</td>
+                    <td> <a href={user.html_url}>{user.title}</a> </td>
+                    <td>{user.user.login}</td>
+                    <td>{
+                       user.labels.map((label) => ( <li>Nombre: {label.name}</li> ))
+                    }</td>
                 </tr>
             ))}
           </tbody>
@@ -59,4 +66,4 @@ const SearchComponent = () => {
   )
 }
 
-export default SearchComponent
+export default SearchComponent
